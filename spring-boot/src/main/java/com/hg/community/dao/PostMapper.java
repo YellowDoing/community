@@ -30,4 +30,13 @@ public interface PostMapper {
     List<Post> selectAllByUserAppId(@Param("userId")int userId, @Param("appId")String appId, @Param("limitP")int limitP, @Param("limitE")int limitE);
 
 
+    @Update("UPDATE post SET goodNum = goodNum + 1 WHERE postId = {postId}")
+    void updatePostGoodNum(int postId);
+
+
+    @Update("UPDATE post SET badNum = badNum + 1 WHERE postId = {postId}")
+    void updatePostBadNum(int postId);
+
+    @Update("UPDATE post SET badNum = commentNum + 1 WHERE postId = {postId}")
+    void updatePostCommentNum(int postId);
 }

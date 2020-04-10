@@ -26,6 +26,9 @@ public class Controller {
     }
 
 
+    /**
+     * 帖子列表,分页
+     */
     @GetMapping("/postList")
     public Result<List<Post>> postList(@RequestParam String appId,
                                        @RequestParam int page,
@@ -35,6 +38,9 @@ public class Controller {
     }
 
 
+    /**
+     * 获取用户的帖子
+     */
     @GetMapping("/postList/user")
     public Result<List<Post>> postListListByUserAppId(@RequestParam int userId,
                                                      @RequestParam String appId,
@@ -45,6 +51,9 @@ public class Controller {
     }
 
 
+    /**
+     * 获取帖子的评论
+     */
     @GetMapping("/commentList/{postId}")
     public Result<List<Comment>> commentListByPostId(@PathVariable int postId,
                                                      @RequestParam int page,
@@ -53,6 +62,9 @@ public class Controller {
                 page * size, (page + 1) * size), "成功");
     }
 
+    /**
+     * 获取用户的评论
+     */
     @GetMapping("/commentList/user")
     public Result<List<Comment>> commentListByUserAppId(@RequestParam int userId,
                                                   @RequestParam String appId,
@@ -63,6 +75,9 @@ public class Controller {
     }
 
 
+    /**
+     * 发帖
+     */
     @PostMapping("/post")
     public Result<Post> createPost(@RequestBody @Validated Post post) {
         postMapper.insertOne(post);
@@ -70,12 +85,36 @@ public class Controller {
         return Result.success(post, "发表成功");
     }
 
-    @PostMapping("/comment")
-    public Result<Comment> comment(@RequestBody @Validated Comment comment) {
-        commentMapper.insertOne(comment);
-        comment.setCreateAt(LocalDateTime.now());
-        return Result.success(comment, "评论成功");
+    /**
+     * 点赞帖子
+     */
+    @PostMapping("/post/good/{postId}")
+    public Result postGood(@PathVariable int postId) {
+        postMapper.updatePostGoodNum(postId);
+        return Result.success(null, "成功");
     }
 
+
+    /**
+     * 讨厌帖子
+     */
+    @PostMapping("/post/bad/{postId}")
+    public Result postBad(@PathVariable int postId) {
+        postMapper.updatePostBadNum(postId);
+        return Result.success(null,"成功");
+    }
+
+
+    /**
+     * 评论
+     */
+    @PostMapping("/comment")
+    public Result<Comment> comment(@RequestBody Comment comment){
+        commentMapper.insertOne(comment);
+        comment.setCreateAt(LocalDateTime.now());
+        //更新帖子的评论数量
+        postMapper.updatePostCommentNum(comment.getPostId());
+        return Result.success(comment,"成功");
+    }
 
 }

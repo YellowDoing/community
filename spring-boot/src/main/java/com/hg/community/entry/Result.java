@@ -1,11 +1,9 @@
 package com.hg.community.entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result<T> {
 
@@ -29,5 +27,27 @@ public class Result<T> {
         return result;
     }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }
